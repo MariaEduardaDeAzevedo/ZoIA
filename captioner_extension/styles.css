@@ -1,0 +1,138 @@
+:root {
+    --persian-blue: rgba(7, 42, 200, 1);
+    --dodger-blue: rgba(30, 150, 252, 1);
+    --uranian-blue: rgba(162, 214, 249, 1);
+    --aureolin: rgba(252, 243, 0, 1);
+    --mikado-yellow: rgba(255, 198, 0, 1);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 512px;
+    height: 100%;
+    margin: auto;
+    align-items: center;
+}
+
+header {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--uranian-blue);
+}
+
+header a img {
+    max-width: 48%;
+}
+
+header a {
+    max-width: 48%;
+}
+
+header span {
+    font-weight: bold;
+    min-width: 30vw;
+    text-align: end;
+}
+
+header button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+    color: var(--uranian-blue);
+    font-weight: bold;
+    background-color: var(--dodger-blue);
+    border: none;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+    width: 100%;
+}
+
+main #switch {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.4rem;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    justify-content: center;
+    background-color: var(--uranian-blue);
+}
+
+main #switch #switcher {
+    max-width: 70%;
+}
+
+main section .section-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+}
+
+main section .section-content {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+footer {
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--uranian-blue);
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    width: 90%;
+}
+
+.form .field {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.2rem;
+    width: 90%;
+}
+
+.form .field input {
+    font-size: 16px;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    width: 90%;
+    border: solid 2px var(--dodger-blue);
+}
+
+.form button {
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    width: 90%;
+    align-self: center;
+    border: none;
+    background-color: var(--dodger-blue);
+    color: white;
+}

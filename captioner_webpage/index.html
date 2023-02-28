@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,  initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="scripts/home.js"></script>
+    <title>ZoIA - Descritor automático de images</title>
+</head>
+<body>
+    <header>
+        <img src="assets/logo.png" alt="Logo escrito ZoIA com ícone escrito CC imitando carinha feliz nomlogar do O.">
+        <nav>
+            <a href="/#registrar">Criar conta</a>
+        </nav>
+    </header>
+    <main>
+        <section id="registrar">
+            <span class="section-title">
+                Registrar
+            </span>
+            <div class="section-content">
+                <div class="field">
+                    <label for="email">
+                        Seu melhor e-mail
+                    </label>
+                    <input type="email" name="email" id="email">
+                </div>
+                <div class="field">
+                    <label for="password">
+                        Senha
+                        <div class="info">
+                            <div class="icon" id="password-info">
+                                <span>i</span>
+                            </div>
+                            <div class="info-modal hidden" id="password-info-modal">
+                                A senha deve ter
+                                <ul>
+                                    <li>
+                                        No mínimo 8 caracteres
+                                    </li>
+                                    <li>
+                                        Ao menos um número
+                                    </li>
+                                    <li>
+                                        Ao menos uma letra maiúscula e uma minúscula
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </label>
+                    <input type="password" name="password" id="password" disabled>
+                </div>
+                <div class="field">
+                    <label for="password-confirmation">
+                        Confirmação de senha
+                    </label>
+                    <input type="password" name="password-confirmation" id="password-confirmation" disabled>
+                </div>
+
+                <button id="send-button" disabled>
+                    Enviar
+                </button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

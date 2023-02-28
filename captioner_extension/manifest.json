@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "version": "1.0",
+    "name": "ZoIA",
+    "content_scripts": [
+        {
+            "matches":["<all_urls>"],
+            "js": ["scripts/main.js"]
+        }
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "action": {
+        "default_popup": "index.html",
+        "default title": "Zoio",
+        "default_icon": "assets/icon.png"
+    },
+    "permissions": [
+        "storage",
+        "webNavigation",
+        "activeTab",
+        "declarativeContent",
+        "tabs",
+        "scripting"
+    ]
+}
