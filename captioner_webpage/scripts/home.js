@@ -14,12 +14,15 @@ var $sendButton = document.getElementById("send-button");
 var $passwordInfo = document.getElementById("password-info");
 var $passwordInfoModal = document.getElementById("password-info-modal");
 
-var $emailValue = "";
+var $menuContent = document.getElementById("menu-content");
+var $menuPin = document.getElementById("menu-pin");
+
+var emailValue = "";
 var $passwordValue = "";
 
 function emailHandle(ev) {
     if (validationEmail.test(ev.target.value)) {
-        $emailValue = ev.target.value;
+        emailValue = ev.target.value;
         isEmailValid = true;
         $password.removeAttribute("disabled")
 
@@ -70,7 +73,7 @@ $passwordConfirmation.addEventListener("keyup", (ev) => {
 
 $sendButton.addEventListener("click", (ev) => {
     let data = {
-        email: $emailValue,
+        email: emailValue,
         password: $passwordValue
     }
 
@@ -79,6 +82,7 @@ $sendButton.addEventListener("click", (ev) => {
 
 $passwordInfo.addEventListener("mouseover", () => {
     $passwordInfoModal.setAttribute("class", "info-modal")
+    console.log("oi")
 })
 
 $passwordInfo.addEventListener("mouseout", () => {
@@ -91,4 +95,21 @@ $passwordInfoModal.addEventListener("mouseover", () => {
 
 $passwordInfoModal.addEventListener("mouseout", () => {
     $passwordInfoModal.setAttribute("class", "info-modal hidden")
+})
+
+$menuPin.addEventListener("mouseover", () => {
+    $menuContent.style.visibility = "visible"
+})
+
+$menuContent.addEventListener("mouseover", () => {
+    $menuContent.style.visibility = "visible"
+    console.log("in")
+})
+
+$menuPin.addEventListener("mouseout", () => {
+    $menuContent.style.visibility = "hidden"
+})
+
+$menuContent.addEventListener("mouseout", () => {
+    $menuContent.style.visibility = "hidden"
 })
