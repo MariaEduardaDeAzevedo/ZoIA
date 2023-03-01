@@ -69,7 +69,7 @@ body {
     cursor: pointer;
 }
 
-#menu img {
+.logo {
     max-width: 16vw;
     background-color: white;
     border-top-right-radius: 48px;
@@ -247,4 +247,41 @@ section#presentation img {
     cursor: pointer;
     max-width: 90%;
     align-self: center;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 10%;
+    cursor: pointer;
+    position: fixed;
+    bottom: 0;
+    transition: 0.8s;
+}
+
+footer #footer-content {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    bottom: 0;
+    width: 100vw;
+}
+
+footer #footer-content #logo-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+}
+
+footer #footer-content #logo-footer .logo {
+    max-width: 5vw;
+}
+
+footer #footer-content #logo-footer span {
+    background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
+    -webkit-background-clip: text;
+    color: transparent;
 }

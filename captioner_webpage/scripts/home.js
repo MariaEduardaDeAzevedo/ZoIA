@@ -17,8 +17,12 @@ var $passwordInfoModal = document.getElementById("password-info-modal");
 var $menuContent = document.getElementById("menu-content");
 var $menuPin = document.getElementById("menu-pin");
 
+var $footerSign = document.getElementById("footer-sign");
+var $footerContent = document.getElementById("footer-content");
+var $footer = document.getElementById("page-footer");
+
 var emailValue = "";
-var $passwordValue = "";
+var passwordValue = "";
 
 function emailHandle(ev) {
     if (validationEmail.test(ev.target.value)) {
@@ -26,7 +30,7 @@ function emailHandle(ev) {
         isEmailValid = true;
         $password.removeAttribute("disabled")
 
-        if ($passwordValue != "") {
+        if (passwordValue != "") {
             $passwordConfirmation.removeAttribute("disabled")
         }
 
@@ -39,6 +43,8 @@ function emailHandle(ev) {
     }
 }
 
+$footerSign.innerHTML = `© ${new Date().getFullYear()} ZoIA`
+
 $email.addEventListener("keyup", (ev) => {
     emailHandle(ev);
 }) 
@@ -49,11 +55,11 @@ $email.addEventListener("change", (ev) => {
 
 $password.addEventListener("keyup", (ev) => {
     if (validationPassword.test(ev.target.value)) {
-        $passwordValue = ev.target.value;
+        passwordValue = ev.target.value;
         $passwordConfirmation.removeAttribute("disabled")
     } else {
         isPassValid = false;
-        $passwordValue = "";
+        passwordValue = "";
         if ($passwordConfirmation.getAttribute("disabled") == null) {
             $passwordConfirmation.setAttribute("disabled", true)
             $passwordConfirmation.value = ""
@@ -62,7 +68,7 @@ $password.addEventListener("keyup", (ev) => {
 })  
 
 $passwordConfirmation.addEventListener("keyup", (ev) => {
-    if (ev.target.value === $passwordValue) {
+    if (ev.target.value === passwordValue) {
         isPassValid = true;
         $sendButton.removeAttribute("disabled")
     } else {
@@ -74,7 +80,7 @@ $passwordConfirmation.addEventListener("keyup", (ev) => {
 $sendButton.addEventListener("click", (ev) => {
     let data = {
         email: emailValue,
-        password: $passwordValue
+        password: passwordValue
     }
 
     register(data)
@@ -103,7 +109,6 @@ $menuPin.addEventListener("mouseover", () => {
 
 $menuContent.addEventListener("mouseover", () => {
     $menuContent.style.visibility = "visible"
-    console.log("in")
 })
 
 $menuPin.addEventListener("mouseout", () => {
@@ -112,4 +117,12 @@ $menuPin.addEventListener("mouseout", () => {
 
 $menuContent.addEventListener("mouseout", () => {
     $menuContent.style.visibility = "hidden"
+})
+
+$footer.addEventListener("mouseover", () => {
+    $footerContent.style.visibility = "visible"
+})
+
+$footer.addEventListener("mouseout", () => {
+    $footerContent.style.visibility = "hidden"
 })
