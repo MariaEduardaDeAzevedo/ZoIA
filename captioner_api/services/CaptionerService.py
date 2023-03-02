@@ -1,7 +1,6 @@
 from datetime import datetime
 from services.AuthService import check_token
 import base64
-import cv2 as cv
 from PIL import Image
 import numpy as np
 import io
@@ -11,8 +10,26 @@ from utils.messages import CAPTIONS_SUCCESSFULLY_GENERATED
 
 from utils.response import build_response
 
+from app import model, tokenizer, feature_extractor, device
+
 TEMP_DIR = "tmp"
 extensions = ["jpg", "png", "jpeg"]
+
+max_length = 16
+num_beams = 4
+gen_kwargs = {"max_length": max_length, "num_beams": num_beams}
+
+def __predict_step(images):
+
+    pixel_values = feature_extractor(images=images, return_tensors="pt").pixel_values
+    pixel_values = pixel_values.to(device)
+
+    output_ids = model.generate(pixel_values, **gen_kwargs)
+
+    preds = tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+    preds = [pred.strip() for pred in preds]
+    return preds
+
 
 def captioner(token, data, ip):
     valid, message, _ = check_token(token, ip)
@@ -20,19 +37,47 @@ def captioner(token, data, ip):
     
     if valid:
         srcs = data["imgs_src"]
-        
+        predictions = dict()
+
         if len(srcs) > 0:
             
-            imgs = list()
+            imgs = dict()
+            successful_imgs = dict()
 
+            counter = 0
             for src in srcs:
                 if src.startswith("data:image"):
-                    imgs.append(__decodeBase64(src))
+                    img = __decodeBase64(src)
+                    imgs[counter] = img
+                    
+                    if img is not None:
+                        successful_imgs[counter] = img
                 else:
-                    imgs.append(__downloadImage(src))
+                     img = __downloadImage(src)
+                     imgs[counter] = img
+
+                     if img is not None:
+                        successful_imgs[counter] = img
+
+                counter += 1
+
+            sorted_keys = sorted(successful_imgs.keys())
+            successful_imgs = {key:successful_imgs[key] for key in sorted_keys}
+            
+            predictions_values = __predict_step(list(successful_imgs.values())) if len(list(successful_imgs.values())) > 0 else []
+            
+            for key in imgs.keys():
+                if key in sorted_keys:
+                    idx = sorted_keys.index(key)
+                    predictions[key] = predictions_values[idx]
+                else:
+                    predictions[key] = None
+
+        sorted_keys = sorted(predictions.keys())
+        predictions = {key:predictions[key] for key in sorted_keys}
         
         response = build_response(CAPTIONS_SUCCESSFULLY_GENERATED, status_code=200, data={
-            "captions": list(map(lambda x: "Descrição gerada automaticamente com ZoIA" if x is not None else "Não foi possível realizar a descrição dessa imagem com ZoIA", srcs))
+            "captions": list(map(lambda x: predictions[x] if x is not None else "Não foi possível realizar a descrição dessa imagem com ZoIA", predictions.keys()))
         })
     else:
         response = build_response(message, status_code=403)
@@ -52,8 +97,8 @@ def __decodeBase64(image:str):
             fh.write(base64.decodebytes(data_bytes))
 
         img = Image.open(file_path)
-        os.remove(file_path)
-        return np.array(img)
+        #os.remove(file_path)
+        return img
     except:
         return None
 
@@ -64,12 +109,11 @@ def __downloadImage(src:str):
         imgdata = response.content
 
         img = Image.open(io.BytesIO(imgdata))
-        img.seek(0)
+    
+        file_path = f"{TEMP_DIR}/{''.join(str(datetime.now().timestamp()).split('.'))}.png"
+        img.save(file_path)
 
-        #file_path = f"{TEMP_DIR}/{''.join(str(datetime.now().timestamp()).split('.'))}.png"
-        #img.save(file_path)
-
-        return np.array(img)
+        return img
     except: 
         return None
     

@@ -1,12 +1,27 @@
-import json
 from flask import Flask, request
-from database.manipulation import init_database, kill
-from services import AuthService, CaptionerService, UserService
 from flask_cors import CORS, cross_origin
+from database.manipulation import init_database, kill
+
+from services import AuthService, CaptionerService, UserService
+
+import json
 import os
 
-from services import UserService
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
+import torch
 
+print("Loading model...")
+model = VisionEncoderDecoderModel.from_pretrained("assets/model")
+print("Loading featire extractor...")
+feature_extractor = ViTImageProcessor.from_pretrained("assets/feature_extractor")
+print("Loading tokenizer...")
+tokenizer = AutoTokenizer.from_pretrained("assets/tokenizer")
+
+print("Configuring device...")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Device configured: {device}")
+model.to(device)
+ 
 app = Flask(__name__)
 
 cors = CORS(app)
@@ -48,5 +63,5 @@ if __name__ == "__main__":
     if not os.path.exists("tmp"):
         os.mkdir("tmp")
         
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=False, host="0.0.0.0")
     kill()

@@ -10,5 +10,5 @@ export DECODE_ALGORITHM="HS256"
 echo "Environment configured, running project."
 
 # RUN PROJECT
-export RESTART_DATABASE="True"
+export RESTART_DATABASE="False"
 python3.10 app.py
