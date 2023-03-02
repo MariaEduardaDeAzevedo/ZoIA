@@ -1,3 +1,7 @@
+captioner_api/assets/tokenizer
+captioner_api/assets/model
+captioner_api/assets/feature_extractor
+
 **/.vscode
 
 **/tmp
