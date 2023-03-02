@@ -36,3 +36,10 @@ To use ZoIA you need to follow the steps below:
 2. Download the extension on your browser (not available yet on the Chrome Extensions store).
 3. Connect your account to the extension, using the popup, and make sure that the software is enabled to run.
 4. Use the Alt + Shift + Z shortcut to generate a caption for an image that is on focus on your screen.
+
+## Credits and acknowledgments
+
+- [@ydshieh](https://ankur3107.github.io/blogs/the-illustrated-image-captioning-using-transformers/) for the [vit-gpt2-image-captioning](https://huggingface.co/nlpconnect/vit-gpt2-image-captioning) model
+- Icons and images from [Flaticon](https://www.flaticon.com/br/)
+  - [CC icon](https://www.flaticon.com/free-icon/cc_9740948?term=closed+caption&page=1&position=4&origin=search&related_id=9740948), from Graphics Plazza
+  - [Eyes icons](https://www.flaticon.com/packs/eyes-pack?word=eyes), from Freepik
