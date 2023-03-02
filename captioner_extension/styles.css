@@ -4,6 +4,7 @@
     --uranian-blue: rgba(162, 214, 249, 1);
     --aureolin: rgba(252, 243, 0, 1);
     --mikado-yellow: rgba(255, 198, 0, 1);
+    --dark-background: rgb(13, 17, 23, 1);
 }
 
 body {
@@ -21,11 +22,16 @@ header {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--uranian-blue);
+    background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
 }
 
 header a img {
     max-width: 48%;
+    border-top-right-radius: 48px;
+    border-top-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 48px;
+    background-color: var(--dark-background);
 }
 
 header a {
@@ -53,12 +59,14 @@ header button {
 }
 
 main {
+    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     padding: 1rem;
     width: 100%;
+    background-color: var(--dark-background);
 }
 
 main #switch {
@@ -71,7 +79,13 @@ main #switch {
     width: 40px;
     border-radius: 50%;
     justify-content: center;
-    background-color: var(--uranian-blue);
+    background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
+}
+
+main span {
+    background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
+    -webkit-background-clip: text;
+    color: transparent;
 }
 
 main #switch #switcher {
@@ -96,7 +110,7 @@ footer {
     display: flex;
     width: 100%;
     padding: 1rem;
-    background-color: var(--uranian-blue);
+    background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
     align-items: center;
     justify-content: center;
 }
@@ -134,5 +148,11 @@ footer {
     align-self: center;
     border: none;
     background-color: var(--dodger-blue);
-    color: white;
+    color: transparent;
+    background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
+    color: var(--dark-background);
+}
+
+header button {
+    background-color: var(--dark-background);
 }
