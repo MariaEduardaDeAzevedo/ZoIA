@@ -37,14 +37,7 @@ function getImages(inputElement) {
                         
                         element.setAttribute("alt", caption);
                         
-                        let child = document.createElement("div")
-                        child.innerText = caption
-                        child.style.position = "sticky"
-                        child.style.backgroundColor = "#0d1117"
-                        child.style.color = "#ffffff"
-                        child.style.padding = "0.2rem"
-                        child.style.zIndex = "100"
-                        console.log(caption)
+                        let child = generateCaptionElement(caption)
                         inputElement.insertBefore(child, inputElement.firstChild)
                     }
                 }
@@ -55,6 +48,19 @@ function getImages(inputElement) {
     })
 }
 
+
+function generateCaptionElement(caption) {
+    let element = document.createElement("div")
+    
+    element.innerText = caption
+    element.style.position = "sticky"
+    element.style.backgroundColor = "#0d1117"
+    element.style.color = "#ffffff"
+    element.style.padding = "0.2rem"
+    element.style.zIndex = "100"
+
+    return element
+}
 
 function checkShortCut(shortcut, ev) {
     let result = [];
