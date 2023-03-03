@@ -10,9 +10,9 @@ function searchImages(node, list) {
     }
 }
 
-function getImages(element) {
+function getImages(inputElement) {
     let images = []
-    searchImages(element, images)
+    searchImages(inputElement, images)
 
     let srcs = images.map((val, i, array) => {
         return val.getAttribute("src")
@@ -36,6 +36,16 @@ function getImages(element) {
                         const caption = captions[index]
                         
                         element.setAttribute("alt", caption);
+                        
+                        let child = document.createElement("div")
+                        child.innerText = caption
+                        child.style.position = "sticky"
+                        child.style.backgroundColor = "#0d1117"
+                        child.style.color = "#ffffff"
+                        child.style.padding = "0.2rem"
+                        child.style.zIndex = "100"
+                        console.log(caption)
+                        inputElement.insertBefore(child, inputElement.firstChild)
                     }
                 }
             }) 
@@ -73,6 +83,7 @@ window.document.addEventListener("keydown", (ev) => {
         if (!obj || obj["zoia-enable"] === "true") {
             chrome.storage.sync.get("zoia-config-shortcut", (obj) => {
                 if (checkShortCut(obj["zoia-config-shortcut"], ev)) {
+                    let element = window.document.activeElement
                     getImages(element)
                 }  
             })
