@@ -45,15 +45,37 @@ function getImages(element) {
     })
 }
 
+
+function checkShortCut(shortcut, ev) {
+    let result = [];
+
+    for (let index = 0; index < shortcut.length; index++) {
+        const key = shortcut[index];
+
+        if (key == "Alt" && ev.altKey) {
+            result.push(true)
+        } else if (key === "Control" && ev.ctrlKey) {
+            result.push(true)
+        } else if (key === "Shift" && ev.shiftKey) {
+            result.push(true)
+        } else if (key === ev.key) {
+            result.push(true)
+        } else {
+            result.push(false)
+        }
+    }
+
+    return !result.includes(false);
+}
+
 window.document.addEventListener("keydown", (ev) => {
     chrome.storage.sync.get("zoia-enable", (obj) => {
-        console.log("Shoot!")
         if (!obj || obj["zoia-enable"] === "true") {
-            if (ev.shiftKey && ev.key === "Z" && ev.altKey) {
-                let element = window.document.activeElement
-                console.log(element)
-                getImages(element)
-            }
+            chrome.storage.sync.get("zoia-config-shortcut", (obj) => {
+                if (checkShortCut(obj["zoia-config-shortcut"], ev)) {
+                    getImages(element)
+                }  
+            })
         }
     })
 })
@@ -61,5 +83,11 @@ window.document.addEventListener("keydown", (ev) => {
 chrome.storage.sync.get("zoia-enable", (obj) => {
     if (!obj || obj["zoia-enable"] === "true") {
         chrome.storage.sync.set({"zoia-enable": "true"})
+    }
+})
+
+chrome.storage.sync.get("zoia-config-shortcut", (obj) => {
+    if (!obj || obj["zoia-config-shortcut"] === undefined) {
+        chrome.storage.sync.set({"zoia-config-shortcut": ["Z", "Shift", "Alt"]});
     }
 })

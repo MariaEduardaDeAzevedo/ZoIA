@@ -3,12 +3,17 @@ const NOT_ALLOWED_KEYS = ["CapsLock", "Tab"]
 let $combinationDisplay = document.getElementById("combination")
 let $saveButton = document.getElementById("save-shortcut")
 
+window.addEventListener("load", () => {
+    chrome.storage.sync.get("zoia-config-shortcut", (obj) => {
+        $combinationDisplay.innerHTML = obj["zoia-config-shortcut"].join(" + ")
+    })
+})
+
 document.addEventListener("keyup", (ev) => {
-    console.log(ev.key)
+    
     let content = $combinationDisplay.innerText
     let splittedContent = content.split("+");
 
-    console.log(splittedContent)
     if (ev.key === "Backspace") {
         splittedContent.pop()
     } else if (!NOT_ALLOWED_KEYS.includes(ev.key)) {
@@ -19,5 +24,15 @@ document.addEventListener("keyup", (ev) => {
 })
 
 $saveButton.addEventListener("click", () => {
-    console.log($combinationDisplay.innerText.split(" + ").map(value => value.trim()))
+    let keys = $combinationDisplay.innerText.split(" + ").map(value => value.trim())
+    
+    if (keys.includes("Alt") || keys.includes("Control") || keys.includes("Shift")) {
+        chrome.storage.sync.set({"zoia-config-shortcut": keys})
+    } else {
+        alert("Seu atalho deve conter uma das seguintes teclas: Alt, Shift, Control")
+
+        chrome.storage.sync.get("zoia-config-shortcut", (obj) => {
+            $combinationDisplay.innerHTML = obj["zoia-config-shortcut"].join(" + ")
+        })
+    }
 })

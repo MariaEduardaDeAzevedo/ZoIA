@@ -94,3 +94,7 @@ $sessionButton.addEventListener("click", () => {
 $configurationButton.addEventListener("click", () => {
     window.location.href = "/configurations.html"
 })
+
+chrome.storage.sync.get("zoia-config-shortcut", (obj) => {
+    console.log(obj["zoia-config-shortcut"])
+})
