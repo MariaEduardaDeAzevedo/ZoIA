@@ -2,6 +2,7 @@ let $switchButton = document.getElementById("switch")
 let $switcher = document.getElementById("switcher")
 let $status = document.getElementById("activation-status")
 let $sessionButton = document.getElementById("session")
+let $configurationButton = document.getElementById("configurations")
 let $accountSpan = document.getElementById("account")
 
 let token = false;
@@ -79,9 +80,7 @@ $switchButton.addEventListener("click", (ev) => {
 })
 
 $sessionButton.addEventListener("click", () => {
-    console.log(token)
     if (!token) {
-        console.log("oi")
         window.location.href = "/login.html"
         token = true;
     } else {
@@ -90,4 +89,8 @@ $sessionButton.addEventListener("click", () => {
         $sessionButton.innerHTML = "Login"
         $accountSpan.innerHTML = ""
     }
+})
+
+$configurationButton.addEventListener("click", () => {
+    window.location.href = "/configurations.html"
 })

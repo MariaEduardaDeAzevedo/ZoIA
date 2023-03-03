@@ -147,7 +147,6 @@ footer {
     width: 90%;
     align-self: center;
     border: none;
-    background-color: var(--dodger-blue);
     color: transparent;
     background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
     color: var(--dark-background);
@@ -155,4 +154,36 @@ footer {
 
 header button {
     background-color: var(--dark-background);
+    color: white;
+    height: 24px;
+}
+
+header button img {
+   width: 10px;
+}
+
+.display {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(rgb(102 178 114), rgb(76 162 203));
+    padding: 1rem;
+    width: 42vw;
+    min-height: 12vh;
+    cursor: pointer;
+}
+
+section button {
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    width: 20%;
+    align-self: center;
+    border: none;
+    color: transparent;
+    background: linear-gradient(rgb(102 178 114), rgb(76 162 203));
+    color: var(--dark-background);
 }
