@@ -11,11 +11,13 @@ from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoToken
 import torch
 
 print("Loading model...")
-model = VisionEncoderDecoderModel.from_pretrained("assets/model")
+
+
+model = VisionEncoderDecoderModel.from_pretrained(os.path.join("assets","image_captioner_model","model", "model"))
 print("Loading featire extractor...")
-feature_extractor = ViTImageProcessor.from_pretrained("assets/feature_extractor")
+feature_extractor = ViTImageProcessor.from_pretrained(os.path.join("assets","image_captioner_model","feature_extractor", "feature_extractor"))
 print("Loading tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained("assets/tokenizer")
+tokenizer = AutoTokenizer.from_pretrained(os.path.join("assets","image_captioner_model","tokenizer", "tokenizer"))
 
 print("Configuring device...")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
