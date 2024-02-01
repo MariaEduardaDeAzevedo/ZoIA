@@ -1,0 +1,21 @@
+.activate-button {
+    background-color: var(--persian-blue);
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.4rem;
+    cursor: pointer;
+    border-radius: 0.4rem;
+}
+
+.email-config-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+form#config-form {
+    width: 100%;
+}

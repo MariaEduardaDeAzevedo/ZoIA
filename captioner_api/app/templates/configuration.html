@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+  <section class="email-config-content">
+    <h1>
+      System Configuration
+    </h1>
+    <p>
+      Here you can configure an e-mail that will be used to dispatch messages to the registered users.
+      On the password field you have to put the same pass that you use to login into the e-mail server. 
+      For safety you always have to inform the current password.
+    </p>
+
+    {%if user.role.name == "SUPERADMIN"%}
+    <button type="button" id="toggle-button" class="activate-button">Edit</button>
+    {%endif%}
+    <form action="/configuration" id="config-form" autocomplete="off" method="POST">
+      <span>E-mail</span>
+      <input name="email" type="email" placeholder="E-mail" class="input" value="{{config.dispatch_email if config.dispatch_email != None else ''}}" disabled/>
+      <span>Password</span>
+      <input name="password" type="password" placeholder="Password" class="input" disabled/>
+      <button class="form-button" type="submit" disabled>Save</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="notification danger">
+          <p>
+              {{messages[0]}}
+          </p>
+      </div>
+      {% endif %}
+    {% endwith %}
+    {% if config.dispatch_email == None %}
+    <div class="notification danger">
+        <p>
+          You have to register an e-mail to make the system work.
+        </p>
+    </div>
+    {% endif %}
+  </section>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("#toggle-button").click(function() {
+        $("#config-form :input").prop("disabled", function(i, val) {
+            return !val;
+        });
+    });
+});
+</script>
+  
+{% endblock %}

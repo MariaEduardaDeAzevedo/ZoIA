@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flask Auth Example</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/profile.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/login.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/user.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/configuration.css') }}" />
+</head>
+
+<body>
+    <header >
+        {% if user and user.role.name != "USER" %}
+            <span>{{user.email}}</span>
+
+            <nav class="navbar">
+                <a href="{{ url_for('users.users_list') }}" class="navbar-item">
+                    Users
+                </a>
+                <a href="{{ url_for('roles.roles_list') }}" class="navbar-item">
+                    Roles
+                </a>
+                {% if user.role.name == 'SUPERADMIN' %}
+                <a href="{{ url_for('main.configuration') }}" class="navbar-item">
+                    Configurations
+                </a>
+                {% endif %}
+                <a href="{{ url_for('auth.logout') }}" class="navbar-item">
+                    Logout
+                </a>
+            </nav>
+        {% endif %}
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+
+</html>
