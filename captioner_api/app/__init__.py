@@ -54,7 +54,7 @@ def create_app():
         
 
         try:
-            access_token = "%032x" % os.environ.get('DEFAULT_ACCESS_TOKEN')
+            access_token = os.environ.get('DEFAULT_ACCESS_TOKEN')
             encoded_access_token = cryptocode.encrypt(access_token,os.environ.get('SECRET_KEY'))
             db.session.add(User('superadmin@localhost.com', 1, encoded_access_token, 'SYSTEM'))
             db.session.commit()

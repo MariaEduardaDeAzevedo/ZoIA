@@ -1,10 +1,12 @@
 from flask import Blueprint, redirect, render_template, url_for
-from flask_login import AnonymousUserMixin, current_user
+from flask_login import AnonymousUserMixin, current_user, login_required
+from app.auth import token_required
 
 from app.models import Role
 
 roles = Blueprint('roles', __name__)
 
+@login_required
 @roles.route('/roles')
 def roles_list():
 

@@ -3,7 +3,7 @@ import os
 import random
 import time
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import AnonymousUserMixin, current_user
+from flask_login import AnonymousUserMixin, current_user, login_required
 from werkzeug.security import generate_password_hash
 import cryptocode
 
@@ -15,6 +15,7 @@ users = Blueprint('users', __name__)
 def decrypt(token):
     return cryptocode.decrypt(token, os.environ.get('SECRET_KEY'))
 
+@login_required
 @users.route('/users')
 def users_list():
 
@@ -29,6 +30,7 @@ def users_list():
 
     return render_template('users.html', user=user, users=users, decrypt=decrypt)
 
+@login_required
 @users.route('/user')
 def add_user():
 
@@ -43,6 +45,7 @@ def add_user():
 
     return render_template('user.html', user=user, edit=None, action='/user')
 
+@login_required
 @users.route('/user', methods=['POST'])
 def add_user_post():
     email = request.form.get('email')
@@ -63,6 +66,7 @@ def add_user_post():
     return redirect(request.referrer) 
 
 
+@login_required
 @users.route('/user/edit/<int:id>')
 def edit_user(id):
 
@@ -77,6 +81,7 @@ def edit_user(id):
     edit_user = User.query.get(id)
     return render_template('user.html', user=user, edit=edit_user, action=f'/user/edit/{id}', decrypt=decrypt)
 
+@login_required
 @users.route('/user/edit/<int:id>', methods=['POST'])
 def edit_user_post(id):
     email = request.form.get('email')
@@ -102,6 +107,7 @@ def edit_user_post(id):
 
     return render_template('users.user_edit', user=user, edit=edit_user, action=f'/user/edit/{id}')
 
+@login_required
 @users.route('/user/activate/<int:id>', methods=['GET'])
 def delete_user(id):
 
