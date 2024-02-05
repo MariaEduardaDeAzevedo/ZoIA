@@ -14,11 +14,12 @@ auth = Blueprint('auth', __name__)
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "Authorizathon" in request.headers:
+        print('oi')
+        if "Authorization" in request.headers:
             token = request.headers['Authorization'].split(" ")[1]
             if not token:
                 return {
-                    "message": 'Could not finish login: authentication token is missing.',
+                    "message": 'authentication token is missing.',
                     "data": None,
                     "error": {
                         "code": 401,
@@ -28,11 +29,21 @@ def token_required(f):
             
             try:
                 data = jwt.decode(token, os.environ.get('SECRET_KEY'), algorithms=[os.environ.get('DECODE_ALGORITHM')])
-                user = User.query.filter_by(email=data['email']).first()
+                user = User.query.get(data['id'])
                 
+                if user != current_user:
+                    return {
+                        "message": 'you are not logged in.',
+                        "data": None,
+                        "error": {
+                            "code": 401,
+                            "error": 'Unauthorized'
+                        }
+                    }, 401
+
                 if not user:
                     return {
-                        "message": 'Could not finish login: invalid authorization token.',
+                        "message": 'invalid authorization token.',
                         "data": None,
                         "error": {
                             "code": 401,
@@ -41,7 +52,7 @@ def token_required(f):
                     }, 401
                 if user.deleted_at:
                     return {
-                        "message": 'Could not finish login: your account is inactive. If you think this is a problem, please contact the tool support team.',
+                        "message": 'your account is inactive. If you think this is a problem, please contact the tool support team.',
                         "data": None,
                         "error": {
                             "code": 401,
@@ -50,7 +61,7 @@ def token_required(f):
                     }, 401
             except Exception as e:
                 return {
-                    "message": 'Could not finish login: it seems like an internal error. Please, report the support team.',
+                    "message": 'it seems like an internal error. Please, report the support team.',
                     "data": None,
                         "error": {
                             "code": 500,
@@ -58,7 +69,18 @@ def token_required(f):
                         }
                     }, 500
             
+            print('tchau')
             return f(user, *args, **kwargs)
+        
+        else:
+            return {
+                    "message": 'authentication token is missing.',
+                    "data": None,
+                    "error": {
+                        "code": 401,
+                        "error": 'Unauthorized'
+                    }
+                }, 401
         
     return decorated
 

@@ -8,6 +8,9 @@ from werkzeug.security import generate_password_hash
 import random
 import cryptocode
 
+from app.services.CaptionerService.captioner import Captioner
+
+captioner_model = Captioner()
 db = SQLAlchemy()
 from .models import Config, Role, User
 
@@ -40,6 +43,9 @@ def create_app():
     from .roles import roles as roles_blueprint
     app.register_blueprint(roles_blueprint)
 
+    from .captioner import captioner as captioner_blueprint
+    app.register_blueprint(captioner_blueprint)
+
     with app.app_context():
         db.create_all()
         
@@ -51,8 +57,6 @@ def create_app():
         except:
             pass
         
-        
-
         try:
             access_token = os.environ.get('DEFAULT_ACCESS_TOKEN')
             encoded_access_token = cryptocode.encrypt(access_token,os.environ.get('SECRET_KEY'))
