@@ -1,8 +1,7 @@
 import base64
 import requests
-from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer, M2M100ForConditionalGeneration, M2M100Tokenizer, pipeline
 import torch
-import json
 import os
 from datetime import datetime
 from PIL import Image
@@ -18,6 +17,10 @@ class Captioner():
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
+
+        # self.translator_model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
+        # self.translator_tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
+        # self.translator_tokenizer.src_lang = 'en'
 
         self.extensions = ["jpg", "png", "jpeg"]
         self.max_length = 16
@@ -76,8 +79,6 @@ class Captioner():
             imgdata = response.content
 
             img = Image.open(io.BytesIO(imgdata))
-            # file_path = f"tmp/{''.join(str(datetime.now().timestamp()).split('.'))}.png"
-            # img.save(file_path)
 
             return img
         except: 
@@ -107,3 +108,9 @@ class Captioner():
             return img
         except:
             return None
+        
+    # def __translate(self, text:str):
+    #     encoded_text = self.translator_tokenizer(text, return_tensors="pt")
+    #     generated_tokens = self.translator_model.generate(**encoded_text, forced_bos_token_id=self.translator_tokenizer.get_lang_id("pt"))
+        
+    #     return self.translator_tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
