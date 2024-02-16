@@ -14,7 +14,6 @@ auth = Blueprint('auth', __name__)
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        print('oi')
         if "Authorization" in request.headers:
             token = request.headers['Authorization'].split(" ")[1]
             if not token:
@@ -68,8 +67,6 @@ def token_required(f):
                             "error": str(e)
                         }
                     }, 500
-            
-            print('tchau')
             return f(user, *args, **kwargs)
         
         else:

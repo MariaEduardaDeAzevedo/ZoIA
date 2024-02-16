@@ -1,14 +1,13 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_admin import Admin
 import os
-from flask_migrate import Migrate
 from flask_login import LoginManager
-from werkzeug.security import generate_password_hash
-import random
 import cryptocode
 
 from app.services.CaptionerService.captioner import Captioner
+
+from flask_swagger import swagger
+from flask_swagger_ui import get_swaggerui_blueprint
 
 captioner_model = Captioner()
 db = SQLAlchemy()
@@ -30,6 +29,25 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+
+    @app.route('/api/docs')
+    def get_swagger():
+        swag = swagger(app)
+        swag['info']['version'] = "1.0"
+        swag['info']['title'] = "My API"
+        return jsonify(swag)
+
+    # Swagger UI route
+    SWAGGER_URL = '/api/docs/ui'
+    API_URL = '/api/docs'
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "ZoIA API"
+        }
+    )
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)

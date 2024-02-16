@@ -18,16 +18,16 @@ class Captioner():
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
 
-        # self.translator_model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
-        # self.translator_tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
-        # self.translator_tokenizer.src_lang = 'en'
+        self.translator_model = M2M100ForConditionalGeneration.from_pretrained(os.path.join(root_path, "assets","translation_model"))
+        self.translator_tokenizer = M2M100Tokenizer.from_pretrained(os.path.join(root_path, "assets","translation_tokenizer"))
+        self.translator_tokenizer.src_lang = 'en'
 
         self.extensions = ["jpg", "png", "jpeg"]
         self.max_length = 16
         self.num_beams = 4
         self.gen_kwargs = {"max_length": self.max_length, "num_beams": self.num_beams}
 
-    def generate_captions(self, srcs: dict):
+    def generate_captions(self, srcs: list):
 
         if len(srcs) > 0:
             imgs = dict()
@@ -57,7 +57,7 @@ class Captioner():
                 if img is None:
                     predictions[key] = 'Could not generate a caption.'
                 else:
-                    predictions[key] = predictions_values[pred_counter]
+                    predictions[key] = self.__translate(predictions_values[pred_counter])
                     pred_counter += 1
 
 
@@ -81,7 +81,7 @@ class Captioner():
             img = Image.open(io.BytesIO(imgdata))
 
             return img
-        except: 
+        except Exception as e:
             return None
 
     def __decodeBase64(self, image:str):
@@ -109,8 +109,8 @@ class Captioner():
         except:
             return None
         
-    # def __translate(self, text:str):
-    #     encoded_text = self.translator_tokenizer(text, return_tensors="pt")
-    #     generated_tokens = self.translator_model.generate(**encoded_text, forced_bos_token_id=self.translator_tokenizer.get_lang_id("pt"))
+    def __translate(self, text:str):
+        encoded_text = self.translator_tokenizer(text, return_tensors="pt")
+        generated_tokens = self.translator_model.generate(**encoded_text, forced_bos_token_id=self.translator_tokenizer.get_lang_id("pt"))
         
-    #     return self.translator_tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+        return self.translator_tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
