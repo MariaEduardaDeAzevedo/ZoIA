@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="user-form-container">
+    <h3 class="title">Add User</h3>
+    <form method="POST" action="{{action}}">
+        <input class="input is-large" type="email" name="email" placeholder="Email" value="{{edit.email if edit else ''}}">
+
+        {% if edit %}
+            <input class="input is-large" placeholder="Access Token" value="{{decrypt(edit.access_token)}}" disabled>
+        {%endif%}
+    
+        <select class="input is-large" name="role_id" placeholder="Role" value="{{edit.role.id if edit else ''}}">
+            <option value="3" {% if edit and edit.role.id == 3 %} selected {%endif%} >USER</option>
+            <option value="2" {% if edit and edit.role.id == 2 %} selected {%endif%}>ADMIN</option>
+            {%if user.role.name == 'SUPERADMIN'%} <option value="1" {% if edit and edit.role.id == 1 %} selected {%endif%}>SUPERADMIN</option> {%endif%}
+        </select>
+
+        <button class="form-button">Save</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="notification danger">
+        <p>
+            {{messages[0]}}
+        </p>
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

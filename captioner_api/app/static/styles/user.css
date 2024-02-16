@@ -1,0 +1,11 @@
+.user-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+}
+
+.user-form-container form {
+    width: 100%;
+}

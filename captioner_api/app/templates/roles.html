@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    <table>
+        <tr>
+            <th>Role</th>
+            <th>Created at</th>
+            <th>Created by</th>
+        </tr>
+        {% for r in roles %}
+            <tr class="{{'inactive' if r.deleted_at else 'active'}}">
+                <td>
+                    {{r.name}}
+                </td>
+                <td>
+                    {{r.created_at}}
+                </td>
+                <td>
+                    {{r.created_by}}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+  
+{% endblock %}

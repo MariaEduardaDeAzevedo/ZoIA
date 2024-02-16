@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    {% if user.role.name != "USER" %}
+    <a href="/user" class="link-button">
+        + New User
+    </a>
+    {% endif %}
+    <table>
+        <tr class="users-row">
+            <th>E-mail</th>
+            <th>Role</th>
+            <th>Access Token</th>
+            <th>Created at</th>
+            <th>Created by</th>
+            <th>Updated at</th>
+            <th>Updated by</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for u in users %}
+            <tr class="{{'inactive' if u.deleted_at else 'active'}} users-row">
+                <td>
+                    {{u.email}}
+                </td>
+                <td>
+                    {{u.role.name}}
+                </td>
+                <td>
+                    <button onclick="copy('{{decrypt(u.access_token)}}')" class="simple-button">COPY</button>
+                </td>
+                <td>
+                    {{u.created_at}}
+                </td>
+                <td>
+                    {{u.created_by}}
+                </td>
+                <td>
+                    {{u.updated_at if u.updated_at else ""}}
+                </td>
+                <td>
+                    {{u.updated_by if u.updated_by else ""}}
+                </td>
+                <td>
+                    {{'ACTIVE' if not u.deleted_at else 'INACTIVE'}}
+                </td>
+                <td>
+                    {% if u.id != user.id and user.role.id <= u.role.id %}
+                        <a href="{{ url_for('users.edit_user', id=u.id) }}" class="table-button">EDIT</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if u.id != user.id and user.role.id <= u.role.id %}
+                        <form action='/user/activate/{{u.id}}' method="GET">
+                            <button class="table-button" type="submit">{{ 'DEACTIVATE' if not u.deleted_at else 'ACTIVATE'}}</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function copy(text) {
+        navigator.clipboard.writeText(text);
+    }
+</script>
+  
+{% endblock %}
