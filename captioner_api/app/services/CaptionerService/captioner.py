@@ -57,9 +57,15 @@ class Captioner():
                 if img is None:
                     predictions[key] = 'Could not generate a caption.'
                 else:
-                    predictions[key] = self.__translate(predictions_values[pred_counter])
+                    predictions[key] = self.__translate(predictions_values[pred_counter])[0]
                     pred_counter += 1
 
+
+        fs = os.listdir("tmp")
+
+        for f in fs:
+            print("REMOVING", f)
+            os.remove(f"tmp/{f}")
 
         return predictions
 
@@ -90,21 +96,16 @@ class Captioner():
             extension = metadata.split("/")[-1][:-1]
             data = data[1:]
 
+            if not os.path.exists("tmp"):
+                os.mkdir("tmp")
+
             data_bytes = bytes(data, "utf-8")
             file_path = f"tmp/{''.join(str(datetime.now().timestamp()).split('.'))}.{extension}"
 
-            tmp = tempfile.NamedTemporaryFile()
+            with open(file_path, "wb") as fh:
+                fh.write(base64.decodebytes(data_bytes))
 
-            try:
-                tmp.write(data_bytes)
-                tmp.seek(0)
-            finally:
-                tmp.close()
-
-            # with open(file_path, "wb") as fh:
-            #     fh.write(base64.decodebytes(data_bytes))
-
-            img = Image.open(tmp.name)
+            img = Image.open(file_path)
             return img
         except:
             return None
