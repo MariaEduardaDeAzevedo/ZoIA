@@ -1,0 +1,7 @@
+./app/assets/*.zip
+./app/assets/feature_extractor
+./app/assets/model
+./app/assets/tokenizer
+./app/assets/translation_model
+./app/assets/translation_tokenizer
+./instance
