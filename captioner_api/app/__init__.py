@@ -8,6 +8,7 @@ from app.services.CaptionerService.captioner import Captioner
 
 from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 captioner_model = Captioner()
 db = SQLAlchemy()
@@ -15,6 +16,7 @@ from .models import Config, Role, User
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI")
     app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
