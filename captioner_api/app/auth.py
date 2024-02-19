@@ -1,5 +1,7 @@
+from datetime import datetime
 from functools import wraps
 import os
+import time
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import AnonymousUserMixin, current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash
@@ -29,17 +31,21 @@ def token_required(f):
             try:
                 data = jwt.decode(token, os.environ.get('SECRET_KEY'), algorithms=[os.environ.get('DECODE_ALGORITHM')])
                 user = User.query.get(data['id'])
-                
-                if user != current_user:
+
+                login_time = data["timestamp"]
+                login_time = datetime.fromtimestamp(login_time)
+                diff = datetime.now() - login_time
+
+                if diff.days > 365:
                     return {
-                        "message": 'you are not logged in.',
+                        "message": 'your session expired.',
                         "data": None,
                         "error": {
                             "code": 401,
                             "error": 'Unauthorized'
                         }
                     }, 401
-
+                    logout_user()
                 if not user:
                     return {
                         "message": 'invalid authorization token.',
@@ -116,8 +122,11 @@ def login_app():
 
         try:
             token = jwt.encode({
-                'id': user.id
+                'id': user.id,
+                'timestamp': time.time()
             }, os.environ.get('SECRET_KEY'), os.environ.get('DECODE_ALGORITHM'))
+
+            print(token)
 
             login_user(user, remember=remember)
             return {

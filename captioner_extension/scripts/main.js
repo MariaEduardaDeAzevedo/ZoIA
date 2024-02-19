@@ -18,30 +18,38 @@ function getImages(inputElement) {
         return val.getAttribute("src")
     });
 
+    console.log(srcs)
+
     chrome.storage.sync.get("zoia-token", (obj) => {
         if (obj["zoia-token"]) {
-            fetch("http://localhost:5000/captioner", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${obj["zoia-token"]}`
-                }, 
-                body: JSON.stringify({"imgs_src": srcs})
-            }).then((res) => {
-                return res.json()
-            }).then((data) => {
-                if (data.data) {
-                    captions = data.data.captions
-                    for (let index = 0; index < images.length; index++) {
-                        const element = images[index];
-                        const caption = captions[index]
-                        
-                        element.setAttribute("alt", caption);
-                        
-                        let child = generateCaptionElement(caption)
-                        inputElement.insertBefore(child, inputElement.firstChild)
+            chrome.storage.sync.get("zoia-host", (o) => {
+                if (o["zoia-host"]) {
+                    fetch(`${o["zoia-host"]}/api/captioner`, {
+                    mode: 'cors',
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json", 
+                        "Authorization": `Bearer ${obj["zoia-token"]}`
+                    }, 
+                    body: JSON.stringify({"images_srcs": srcs})
+                }).then((res) => {
+                    return res.json()
+                }).then((data) => {
+                    if (data) {
+                        captions = data
+                        for (let index = 0; index < images.length; index++) {
+                            const element = images[index];
+                            const caption = captions[index]
+                            
+                            element.setAttribute("alt", caption);
+                            
+                            let child = generateCaptionElement(caption)
+                            inputElement.insertBefore(child, inputElement.firstChild)
+                        }
                     }
-                }
             }) 
+                }
+            })
         } else {
             alert("O ZoIA está habilitado, mas não há contas logadas. Faça login para continuar!")
         }
@@ -87,7 +95,9 @@ function checkShortCut(shortcut, ev) {
 window.document.addEventListener("keydown", (ev) => {
     chrome.storage.sync.get("zoia-enable", (obj) => {
         if (!obj || obj["zoia-enable"] === "true") {
+            console.log("ENABLE")
             chrome.storage.sync.get("zoia-config-shortcut", (obj) => {
+                console.log(obj["zoia-config-shortcut"])
                 if (checkShortCut(obj["zoia-config-shortcut"], ev)) {
                     let element = window.document.activeElement
                     getImages(element)

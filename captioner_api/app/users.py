@@ -4,8 +4,10 @@ import random
 import time
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import AnonymousUserMixin, current_user, login_required
+import jwt
 from werkzeug.security import generate_password_hash
 import cryptocode
+from app.auth import token_required
 
 from app.models import User
 from . import db
@@ -125,6 +127,16 @@ def delete_user(id):
         db.session.commit()
 
     return redirect(request.referrer) 
+
+@users.route("/api/account", methods=["GET"])
+@token_required
+def get_account_info(user):
+    return {
+            "data": {
+                "email": user.email
+            },
+            "message": 'User successfully returned.'
+        }, 200
 
 def _validate_user_form(email, role_id, user):
     if email.strip() == "" or role_id is None:

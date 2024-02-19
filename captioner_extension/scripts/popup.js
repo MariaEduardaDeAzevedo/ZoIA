@@ -1,3 +1,5 @@
+import { get_account } from "../services/account.js"
+
 let $switchButton = document.getElementById("switch")
 let $switcher = document.getElementById("switcher")
 let $status = document.getElementById("activation-status")
@@ -7,8 +9,8 @@ let $accountSpan = document.getElementById("account")
 
 let token = false;
 
-chrome.storage.sync.get(["zoia-token"], async (obj) => {
-    console.log(obj)
+chrome.storage.sync.get(["zoia-token"], (obj) => {
+    console.log(obj["zoia-token"])
     if (!obj["zoia-token"]) {
         $sessionButton.innerHTML = "Login";
         token = false;
@@ -19,21 +21,14 @@ chrome.storage.sync.get(["zoia-token"], async (obj) => {
         chrome.storage.sync.get('zoia-token', (obj) => {
             if (obj) {
                 let token = obj['zoia-token']
-                fetch("http://localhost:5000/account", {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    method: "GET",
-                }).then((res) => {
-                    return res.json()
-                }).then((data) => {
-                    if (data.data) {
-                        $accountSpan.innerHTML = data.data.email
+                let account = get_account(token)
+
+                chrome.storage.sync.get('zoia-user', (obj) => {
+                    if (obj['zoia-user']) {
+                        $accountSpan.innerHTML = obj['zoia-user']
                     } else {
                         $accountSpan.innerHTML = ""
                     }
-                }).catch(() => {
-                    alert("Algo deu errado ao tentar se conectar ao servidor. Tente novamente mais tarde.")
                 })
             }
         })
