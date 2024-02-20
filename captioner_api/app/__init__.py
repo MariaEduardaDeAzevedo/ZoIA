@@ -9,17 +9,20 @@ from app.services.CaptionerService.captioner import Captioner
 from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
+from dotenv import load_dotenv
 
+load_dotenv()
 captioner_model = Captioner()
 db = SQLAlchemy()
+
 from .models import Config, Role, User
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI")
-    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URI")
+    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
     db.init_app(app)
 
@@ -78,8 +81,8 @@ def create_app():
             pass
         
         try:
-            access_token = os.environ.get('DEFAULT_ACCESS_TOKEN')
-            encoded_access_token = cryptocode.encrypt(access_token,os.environ.get('SECRET_KEY'))
+            access_token = os.getenv('DEFAULT_ACCESS_TOKEN')
+            encoded_access_token = cryptocode.encrypt(access_token,os.getenv('SECRET_KEY'))
             db.session.add(User('superadmin@localhost.com', 1, encoded_access_token, 'SYSTEM'))
             db.session.commit()
         except Exception as e:

@@ -29,7 +29,7 @@ def token_required(f):
                 }, 401
             
             try:
-                data = jwt.decode(token, os.environ.get('SECRET_KEY'), algorithms=[os.environ.get('DECODE_ALGORITHM')])
+                data = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=[os.getenv('DECODE_ALGORITHM')])
                 user = User.query.get(data['id'])
 
                 login_time = data["timestamp"]
@@ -103,7 +103,7 @@ def login_app():
                     "data": None,
                     "error": {'error':"Bad request", 'code': 400}
                 }, 400
-        elif password != cryptocode.decrypt(user.access_token, os.environ.get('SECRET_KEY')):
+        elif password != cryptocode.decrypt(user.access_token, os.getenv('SECRET_KEY')):
             return {
                     "message": "Could not finish login: access token provided is invalid.",
                     "data": None,
@@ -124,7 +124,7 @@ def login_app():
             token = jwt.encode({
                 'id': user.id,
                 'timestamp': time.time()
-            }, os.environ.get('SECRET_KEY'), os.environ.get('DECODE_ALGORITHM'))
+            }, os.getenv('SECRET_KEY'), os.getenv('DECODE_ALGORITHM'))
 
             print(token)
 
@@ -161,7 +161,7 @@ def login_post():
     if not user:
         flash('Email not found. Please check your login details and try again.')
         return redirect(url_for('auth.login')) 
-    elif password != cryptocode.decrypt(user.access_token, os.environ.get('SECRET_KEY')):
+    elif password != cryptocode.decrypt(user.access_token, os.getenv('SECRET_KEY')):
         flash('Wrong password. Please check your login details and try again.')
         return redirect(url_for('auth.login')) 
     

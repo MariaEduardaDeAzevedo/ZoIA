@@ -46,7 +46,7 @@ def configuration_post():
     config = Config.query.get(1)
     if email.strip() != '' and password.strip() != '':
         config.dispatch_email = email
-        encoded_pass = cryptocode.encrypt(password,os.environ.get('SECRET_KEY'))
+        encoded_pass = cryptocode.encrypt(password,os.getenv('SECRET_KEY'))
         config.dispatch_email_password = encoded_pass
         db.session.commit()
     else:

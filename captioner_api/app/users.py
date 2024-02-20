@@ -15,7 +15,7 @@ from . import db
 users = Blueprint('users', __name__)
 
 def decrypt(token):
-    return cryptocode.decrypt(token, os.environ.get('SECRET_KEY'))
+    return cryptocode.decrypt(token, os.getenv('SECRET_KEY'))
 
 @login_required
 @users.route('/users')
@@ -56,7 +56,7 @@ def add_user_post():
 
     if _validate_user_form(email, role_id, None): 
         access_token = "%032x" % random.getrandbits(128)
-        encoded_access_token = cryptocode.encrypt(access_token,os.environ.get('SECRET_KEY'))
+        encoded_access_token = cryptocode.encrypt(access_token,os.getenv('SECRET_KEY'))
         new_user = User(email=email, access_token=encoded_access_token, role_id=role_id, created_by=current_user.email)
 
         db.session.add(new_user)
