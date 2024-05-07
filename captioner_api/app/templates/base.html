@@ -25,11 +25,11 @@
                 <a href="{{ url_for('roles.roles_list') }}" class="navbar-item">
                     Roles
                 </a>
-                {% if user.role.name == 'SUPERADMIN' %}
+                <!-- {% if user.role.name == 'SUPERADMIN' %}
                 <a href="{{ url_for('main.configuration') }}" class="navbar-item">
                     Configurations
                 </a>
-                {% endif %}
+                {% endif %} -->
                 <a href="{{ url_for('auth.logout') }}" class="navbar-item">
                     Logout
                 </a>

@@ -111,6 +111,7 @@ class Captioner():
             return None
         
     def __translate(self, text:str):
+        print(text)
         encoded_text = self.translator_tokenizer(text, return_tensors="pt")
         generated_tokens = self.translator_model.generate(**encoded_text, forced_bos_token_id=self.translator_tokenizer.get_lang_id("pt"))
         
